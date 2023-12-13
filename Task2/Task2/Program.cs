@@ -8,7 +8,6 @@ class Program
         char litera2 = 'B';
         char litera3 = 'C';
 
-        // Wypisywanie liter w odwrotnej kolejności
-        Console.WriteLine($"{litera3} {litera2} {litera1}");
+       Console.WriteLine($"{litera3} {litera2} {litera1}");
     }
 }
