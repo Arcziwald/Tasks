@@ -5,17 +5,17 @@ class Program
     static void Main()
     {
         Console.WriteLine("Podaj wynik z matematyki");
-        int wynikMatematyka = Convert.ToInt32(Console.ReadLine());
+        int resultMath = Convert.ToInt32(Console.ReadLine());
 
         Console.WriteLine("Podaj wynik z fizyki");
-        int wynikFizyka = Convert.ToInt32(Console.ReadLine());
+        int resultPhysics = Convert.ToInt32(Console.ReadLine());
 
         Console.WriteLine("Podaj wynik z chemii");
-        int wynikChemia = Convert.ToInt32(Console.ReadLine());
+        int resultChemistry = Convert.ToInt32(Console.ReadLine());
 
-        bool kwalifikacja = (wynikMatematyka > 70 && wynikFizyka > 55 && wynikChemia > 45 && (wynikMatematyka + wynikFizyka + wynikChemia) > 180) || (wynikMatematyka + Math.Max(wynikFizyka, wynikChemia) > 150);
+        bool qualification = (resultMath > 70 && resultPhysics > 55 && resultChemistry > 45 && (resultMath + resultPhysics + resultChemistry) > 180) || (resultMath + Math.Max(resultPhysics, resultChemistry) > 150);
 
-        if (kwalifikacja)
+        if (qualification)
             {
             Console.WriteLine("Kandydat dopuszczony do rekrutacji");
         }
