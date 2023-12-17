@@ -1,16 +1,17 @@
 ﻿using System;
+using System.Drawing;
 
 class Program
 {
     static void Main()
     {
-        int liczbaCalkowita = 10;
-        string tekst = "Szkoła Dotneta";
-        double liczbaZmiennoprzecinkowa = 12.5;
+        int integer = 10;
+        string text = "Szkoła Dotneta";
+        double floatingpointNumber = 12.5;
 
-        Console.WriteLine($"Liczba całkowita: {liczbaCalkowita}");
-        Console.WriteLine($"Tekst: {tekst}");
-        Console.WriteLine($"Liczba zmiennoprzecinkowa: {liczbaZmiennoprzecinkowa}");
+        Console.WriteLine($"Liczba całkowita: {integer}");
+        Console.WriteLine($"Tekst: {text}");
+        Console.WriteLine($"Liczba zmiennoprzecinkowa: {floatingpointNumber}");
     }
 }
 

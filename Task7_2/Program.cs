@@ -5,15 +5,15 @@ class Program
     static void Main()
     {
         Console.WriteLine("Podaj liczbe:");
-        int liczba = Convert.ToInt32 (Console.ReadLine());
+        int number = Convert.ToInt32 (Console.ReadLine());
 
-        if (liczba % 2 == 0) 
+        if (number % 2 == 0) 
         {
-            Console.WriteLine($"{liczba} jest liczbą parzystą");
+            Console.WriteLine($"{number} jest liczbą parzystą");
         }
         else
         {
-            Console.WriteLine($"{liczba} jest liczbą nieparzystą");
+            Console.WriteLine($"{number} jest liczbą nieparzystą");
         }
     }
 }

@@ -6,15 +6,15 @@ class Program
     static void Main()
     {
         Console.WriteLine("Podaj liczbę: ");
-        int liczba = Convert.ToInt32(Console.ReadLine());
+        int number = Convert.ToInt32(Console.ReadLine());
 
-        if (liczba > 0)
+        if (number > 0)
                 {
-            Console.WriteLine($"{liczba} jest liczbą dodatnią");
+            Console.WriteLine($"{number} jest liczbą dodatnią");
         }
-      else if (liczba < 0)
+      else if (number < 0)
         {
-            Console.WriteLine($"{liczba} jest liczbą ujemną");
+            Console.WriteLine($"{number} jest liczbą ujemną");
         }
       else 
         {

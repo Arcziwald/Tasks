@@ -6,28 +6,28 @@ class Program
     static void Main()
     {
         Console.WriteLine("Podaj pierwszą liczbę");
-        int liczba1 = Convert.ToInt32(Console.ReadLine());
+        int number1 = Convert.ToInt32(Console.ReadLine());
 
         Console.WriteLine("Podaj drugą liczbę");
-        int liczba2 = Convert.ToInt32(Console.ReadLine());
+        int number2 = Convert.ToInt32(Console.ReadLine());
 
         Console.WriteLine("Podaj trzecią liczbę");
-        int liczba3 = Convert.ToInt32(Console.ReadLine());
+        int number3 = Convert.ToInt32(Console.ReadLine());
 
-        int największa;
+        int largest;
 
-        if (liczba1 > liczba2 && liczba1 > liczba3)
+        if (number1 > number2 && number1 > number3)
         {
-            największa = liczba1;
+            largest = number1;
         }
-        else if (liczba2 > liczba3)
+        else if (number2 > number3)
         {
-            największa = liczba2;
+            largest = number2;
         }
         else
         {
-            największa = liczba3;
+            largest = number3;
         }
-        Console.WriteLine($"{największa} jest największa z podanych");
+        Console.WriteLine($"{largest} jest największa z podanych");
     }
 }

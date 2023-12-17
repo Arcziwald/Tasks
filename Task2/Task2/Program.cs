@@ -4,10 +4,10 @@ class Program
 {
     static void Main()
     {
-        char litera1 = 'A';
-        char litera2 = 'B';
-        char litera3 = 'C';
+        char number1 = 'A';
+        char number2 = 'B';
+        char number3 = 'C';
 
-       Console.WriteLine($"{litera3} {litera2} {litera1}");
+       Console.WriteLine($"{number3} {number2} {number1}");
     }
 }
