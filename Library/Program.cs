@@ -27,6 +27,7 @@ namespace Library
                 Console.WriteLine("2. Usuń książkę");
                 Console.WriteLine("3. Dodaj użytkownika");
                 Console.WriteLine("4. Wyświetl dostępne książki");
+                Console.WriteLine("5. Wyszukaj książkę po tytule");
                 Console.WriteLine("Wybierz opcję:");
 
                 int choice = Convert.ToInt32(Console.ReadLine());
@@ -45,7 +46,9 @@ namespace Library
                     case 4:
                         ViewBooks(library);
                         break;
-                    
+                    case 5:
+                        SearchBook(library);
+                        break;
                     default:
                         Console.WriteLine("Nieprawidłowa opcja.");
                         break;
@@ -100,6 +103,22 @@ namespace Library
             for (int i = 0; i < library.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {library[i]}");
+            }
+        }
+
+        static void SearchBook(List<Book> library)
+        {
+            Console.WriteLine("Wprowadź tytuł książki:");
+            string title = Console.ReadLine();
+
+            Book foundBook = library.FirstOrDefault(book => book.Title.ToLower().Contains(title.ToLower()));
+            if (foundBook != null)
+            {
+                Console.WriteLine($"Znaleziono książkę: {foundBook}");
+            }
+            else
+            {
+                Console.WriteLine("Książka nie została znaleziona.");
             }
         }
     }
