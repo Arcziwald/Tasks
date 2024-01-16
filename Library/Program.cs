@@ -8,11 +8,11 @@ namespace Library
         static void Main(string[] args)
         {
             List<Book> library = new List<Book>()
-        {
+            {
             new ("Władca Pierścieni", "J.R.R. Tolkien", 1954),
             new ("1984", "George Orwell", 1949),
             new ("Harry Potter", "J.K. Rowling", 1997)
-        };
+            };
 
             List<User> users = new List<User>
         {
@@ -28,6 +28,7 @@ namespace Library
                 Console.WriteLine("3. Dodaj użytkownika");
                 Console.WriteLine("4. Wyświetl dostępne książki");
                 Console.WriteLine("5. Wyszukaj książkę po tytule");
+                Console.WriteLine("6. Wyjdź z programu");
                 Console.WriteLine("Wybierz opcję:");
 
                 int choice = Convert.ToInt32(Console.ReadLine());
@@ -37,18 +38,27 @@ namespace Library
                     case 1:
                         AddBook(library);
                         break;
+
                     case 2:
                         RemoveBook(library);
                         break;
+
                     case 3:
                         AddUser(users);
                         break;
+
                     case 4:
                         ViewBooks(library);
                         break;
+
                     case 5:
                         SearchBook(library);
                         break;
+
+                    case 6:
+                        Environment.Exit(0);
+                        break;
+
                     default:
                         Console.WriteLine("Nieprawidłowa opcja.");
                         break;
