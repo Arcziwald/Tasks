@@ -31,7 +31,11 @@ namespace Library
                 Console.WriteLine("6. Wyjdź z programu");
                 Console.WriteLine("Wybierz opcję:");
 
-                int choice = Convert.ToInt32(Console.ReadLine());
+                if (!int.TryParse(Console.ReadLine(), out int choice))
+                {
+                    Console.WriteLine("Proszę wprowadzić liczbę.");
+                    continue;
+                }
 
                 switch (choice)
                 {
@@ -73,7 +77,11 @@ namespace Library
             Console.WriteLine("Wprowadź autora książki:");
             string author = Console.ReadLine();
             Console.WriteLine("Wprowadź rok wydania książki:");
-            int year = Convert.ToInt32(Console.ReadLine());
+            if (!int.TryParse(Console.ReadLine(), out int year))
+            {
+                Console.WriteLine("Proszę wprowadzić poprawny rok.");
+                return;
+            }
 
             library.Add(new Book(title, author, year));
             Console.WriteLine("Książka dodana.");
