@@ -1,26 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Library.Core; // Dla klas Book, User
+using Library.Services; // Dla IBookService, IUserService
+using System;
+using System.Linq;
 
 namespace Library
 {
     public class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            List<Book> library = new List<Book>()
-            {
-            new ("Władca Pierścieni", "J.R.R. Tolkien", 1954),
-            new ("1984", "George Orwell", 1949),
-            new ("Harry Potter", "J.K. Rowling", 1997)
-            };
+            IBookService bookService = new BookService();
+            IUserService userService = new UserService();
 
-            List<User> users = new List<User>
-        {
-            new (1,"Jan Kowalski", "jan@kowalski.com"),
-            new (2, "Anna Nowak", "anna@nowak.com")
-        };
-
-            // Menu dla bibliotekarza
             while (true)
             {
                 Console.WriteLine("\n1. Dodaj książkę");
@@ -29,6 +20,7 @@ namespace Library
                 Console.WriteLine("4. Wyświetl dostępne książki");
                 Console.WriteLine("5. Wyszukaj książkę po tytule");
                 Console.WriteLine("6. Wyjdź z programu");
+                Console.WriteLine("7. Wypożycz książkę");
                 Console.WriteLine("Wybierz opcję:");
 
                 if (!int.TryParse(Console.ReadLine(), out int choice))
@@ -40,27 +32,31 @@ namespace Library
                 switch (choice)
                 {
                     case 1:
-                        AddBook(library);
+                        AddBook(bookService);
                         break;
 
                     case 2:
-                        RemoveBook(library);
+                        RemoveBook(bookService);
                         break;
 
                     case 3:
-                        AddUser(users);
+                        AddUser(userService);
                         break;
 
                     case 4:
-                        ViewBooks(library);
+                        ViewBooks(bookService);
                         break;
 
                     case 5:
-                        SearchBook(library);
+                        SearchBook(bookService);
                         break;
 
                     case 6:
                         Environment.Exit(0);
+                        break;
+
+                    case 7:
+                        BorrowBook(bookService, userService);
                         break;
 
                     default:
@@ -70,31 +66,36 @@ namespace Library
             }
         }
 
-        static void AddBook(List<Book> library)
+        private static void AddBook(IBookService bookService)
         {
             Console.WriteLine("Wprowadź tytuł książki:");
             string title = Console.ReadLine();
             Console.WriteLine("Wprowadź autora książki:");
             string author = Console.ReadLine();
             Console.WriteLine("Wprowadź rok wydania książki:");
+
             if (!int.TryParse(Console.ReadLine(), out int year))
             {
                 Console.WriteLine("Proszę wprowadzić poprawny rok.");
                 return;
             }
 
-            library.Add(new Book(title, author, year));
+            bookService.AddBook(new Book(title, author, year));
             Console.WriteLine("Książka dodana.");
         }
 
-        static void RemoveBook(List<Book> library)
+        private static void RemoveBook(IBookService bookService)
         {
-            ViewBooks(library);
-            Console.WriteLine("Wprowadź numer książki do usunięcia:");
-            int index = Convert.ToInt32(Console.ReadLine()) - 1;
-            if (index >= 0 && index < library.Count)
+            var books = bookService.GetAllBooks();
+            for (int i = 0; i < books.Count; i++)
             {
-                library.RemoveAt(index);
+                Console.WriteLine($"{i + 1}. {books[i]}");
+            }
+
+            Console.WriteLine("Wprowadź numer książki do usunięcia:");
+            if (int.TryParse(Console.ReadLine(), out int index) && index >= 1 && index <= books.Count)
+            {
+                bookService.RemoveBook(index - 1);
                 Console.WriteLine("Książka usunięta.");
             }
             else
@@ -103,33 +104,39 @@ namespace Library
             }
         }
 
-        static void AddUser(List<User> users)
+        private static void AddUser(IUserService userService)
         {
             Console.WriteLine("Wprowadź imię i nazwisko użytkownika:");
             string name = Console.ReadLine();
             Console.WriteLine("Wprowadź email użytkownika:");
             string email = Console.ReadLine();
 
-            int newId = users.Count + 1;
-            users.Add(new User(newId, name, email));
+            int newId = userService.GetNextUserId();
+            userService.AddUser(new User(newId, name, email));
             Console.WriteLine("Użytkownik dodany. Przyznano ID: " + newId);
         }
 
-        static void ViewBooks(List<Book> library)
+        private static void ViewBooks(IBookService bookService)
         {
-            Console.WriteLine("Dostępne książki:");
-            for (int i = 0; i < library.Count; i++)
+            var books = bookService.GetAllBooks();
+            if (books.Count == 0)
             {
-                Console.WriteLine($"{i + 1}. {library[i]}");
+                Console.WriteLine("Brak dostępnych książek.");
+            }
+            else
+            {
+                foreach (var book in books)
+                {
+                    Console.WriteLine(book);
+                }
             }
         }
 
-        static void SearchBook(List<Book> library)
+        private static void SearchBook(IBookService bookService)
         {
             Console.WriteLine("Wprowadź tytuł książki:");
             string title = Console.ReadLine();
-
-            Book foundBook = library.FirstOrDefault(book => book.Title.ToLower().Contains(title.ToLower()));
+            var foundBook = bookService.SearchBook(title);
             if (foundBook != null)
             {
                 Console.WriteLine($"Znaleziono książkę: {foundBook}");
@@ -138,6 +145,57 @@ namespace Library
             {
                 Console.WriteLine("Książka nie została znaleziona.");
             }
+        }
+
+        private static void BorrowBook(IBookService bookService, IUserService userService)
+        {
+            // Wyświetlenie dostępnych książek
+            var availableBooks = bookService.GetAllBooks().Where(b => b.Available).ToList();
+            if (availableBooks.Count == 0)
+            {
+                Console.WriteLine("Brak dostępnych książek do wypożyczenia.");
+                return;
+            }
+
+            Console.WriteLine("Dostępne książki:");
+            foreach (var book in availableBooks)
+            {
+                Console.WriteLine($"{book.Id}. {book.Title} - {book.Author}");
+            }
+
+            // Wybór książki do wypożyczenia
+            Console.WriteLine("Podaj ID książki do wypożyczenia:");
+            if (!int.TryParse(Console.ReadLine(), out int bookId) || !availableBooks.Any(b => b.Id == bookId))
+            {
+                Console.WriteLine("Nieprawidłowy ID książki.");
+                return;
+            }
+
+            // Wyświetlenie listy użytkowników
+            var users = userService.GetAllUsers();
+            if (users.Count == 0)
+            {
+                Console.WriteLine("Brak zarejestrowanych użytkowników.");
+                return;
+            }
+
+            Console.WriteLine("Zarejestrowani użytkownicy:");
+            foreach (var user in users)
+            {
+                Console.WriteLine($"{user.Id}. {user.Name}");
+            }
+
+            // Wybór użytkownika, który wypożycza książkę
+            Console.WriteLine("Podaj ID użytkownika wypożyczającego książkę:");
+            if (!int.TryParse(Console.ReadLine(), out int userId) || !users.Any(u => u.Id == userId))
+            {
+                Console.WriteLine("Nieprawidłowy ID użytkownika.");
+                return;
+            }
+
+            // Wypożyczenie książki
+            bookService.BorrowBook(bookId, userId);
+            Console.WriteLine("Książka została wypożyczona.");
         }
     }
 }
