@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Library
 {
-    public class Program
+    public class Program 
     {
         private static void Main(string[] args)
         {
