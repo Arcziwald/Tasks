@@ -1,9 +1,9 @@
 ﻿using Library.Core;
-using System;
+using Library.Service;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Library.Services
+namespace Library.Service
 {
     public class BookService : IBookService
     {
@@ -12,7 +12,6 @@ namespace Library.Services
         public BookService()
         {
             _books = new List<Book>();
-            // Możesz tu dodać kilka książek dla testów
         }
 
         public void AddBook(Book book)
@@ -28,13 +27,18 @@ namespace Library.Services
             }
         }
 
+        public Book? SearchBook(string title)
+        {
+            return _books.FirstOrDefault(book => book.Title.ToLower().Contains(title.ToLower()));
+        }
+
         public void BorrowBook(int bookId, int userId)
         {
-            var book = _books.FirstOrDefault(b => b.Id == bookId);
-            if (book != null && book.Available)
+            var book = _books.FirstOrDefault(b => b.Id == bookId && b.Available);
+            if (book != null)
             {
-                book.BorrowedById = userId;
                 book.Available = false;
+                book.BorrowedById = userId;
             }
         }
 
@@ -42,22 +46,5 @@ namespace Library.Services
         {
             return _books;
         }
-
-        public List<Book> GetBooksByGenre(string genre)
-        {
-            return _books.Where(b => b.Genre.Equals(genre, StringComparison.OrdinalIgnoreCase)).ToList();
-        }
-
-        public List<Book> GetBooksSortedByYear()
-        {
-            return _books.OrderBy(b => b.YearOfPublication).ToList();
-        }
-
-        public Book SearchBook(string title)
-        {
-            return _books.FirstOrDefault(book => book.Title.ToLower().Contains(title.ToLower()));
-        }
-
-        // Inne metody
     }
 }

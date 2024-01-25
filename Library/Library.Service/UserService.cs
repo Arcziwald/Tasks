@@ -1,8 +1,9 @@
 ﻿using Library.Core;
 using System.Collections.Generic;
 using System.Linq;
+using Library.Service;
 
-namespace Library.Services
+namespace Library.Service
 {
     public class UserService : IUserService
     {
@@ -11,7 +12,6 @@ namespace Library.Services
         public UserService()
         {
             _users = new List<User>();
-            // Możesz tu dodać kilku użytkowników dla testów
         }
 
         public void AddUser(User user)
@@ -19,11 +19,19 @@ namespace Library.Services
             _users.Add(user);
         }
 
-        public int GetNextUserId()
+        public User? GetUser(int userId)
         {
-            return _users.Count == 0 ? 1 : _users.Max(user => user.Id) + 1;
+            return _users.FirstOrDefault(u => u.Id == userId);
         }
 
-        // Inne metody
+        public IEnumerable<User> GetAllUsers()
+        {
+            return _users;
+        }
+
+        public int GetNextUserId()
+        {
+            return _users.Count == 0 ? 1 : _users.Max(u => u.Id) + 1;
+        }
     }
 }

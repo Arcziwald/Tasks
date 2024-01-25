@@ -1,5 +1,5 @@
 ﻿using Library.Core; // Dla klas Book, User
-using Library.Services; // Dla IBookService, IUserService
+using Library.Service; // Dla IBookService, IUserService
 using System;
 using System.Linq;
 
@@ -69,9 +69,9 @@ namespace Library
         private static void AddBook(IBookService bookService)
         {
             Console.WriteLine("Wprowadź tytuł książki:");
-            string title = Console.ReadLine();
+            string title = Console.ReadLine() ?? string.Empty;
             Console.WriteLine("Wprowadź autora książki:");
-            string author = Console.ReadLine();
+            string author = Console.ReadLine() ?? string.Empty;
             Console.WriteLine("Wprowadź rok wydania książki:");
 
             if (!int.TryParse(Console.ReadLine(), out int year))
@@ -80,8 +80,15 @@ namespace Library
                 return;
             }
 
-            bookService.AddBook(new Book(title, author, year));
-            Console.WriteLine("Książka dodana.");
+            if (title != null && author != null) // Zmiana: sprawdzenie, czy tytuł i autor nie są null
+            {
+                bookService.AddBook(new Book(title, author, year));
+                Console.WriteLine("Książka dodana.");
+            }
+            else
+            {
+                Console.WriteLine("Tytuł i autor nie mogą być puste.");
+            }
         }
 
         private static void RemoveBook(IBookService bookService)
@@ -107,9 +114,9 @@ namespace Library
         private static void AddUser(IUserService userService)
         {
             Console.WriteLine("Wprowadź imię i nazwisko użytkownika:");
-            string name = Console.ReadLine();
+            string name = Console.ReadLine() ?? string.Empty; // Dodano sprawdzenie null
             Console.WriteLine("Wprowadź email użytkownika:");
-            string email = Console.ReadLine();
+            string email = Console.ReadLine() ?? string.Empty; // Dodano sprawdzenie null
 
             int newId = userService.GetNextUserId();
             userService.AddUser(new User(newId, name, email));
@@ -135,7 +142,7 @@ namespace Library
         private static void SearchBook(IBookService bookService)
         {
             Console.WriteLine("Wprowadź tytuł książki:");
-            string title = Console.ReadLine();
+            string title = Console.ReadLine() ?? string.Empty;
             var foundBook = bookService.SearchBook(title);
             if (foundBook != null)
             {
@@ -165,7 +172,7 @@ namespace Library
 
             // Wybór książki do wypożyczenia
             Console.WriteLine("Podaj ID książki do wypożyczenia:");
-            if (!int.TryParse(Console.ReadLine(), out int bookId) || !availableBooks.Any(b => b.Id == bookId))
+            if (!int.TryParse(Console.ReadLine(), out int bookId))
             {
                 Console.WriteLine("Nieprawidłowy ID książki.");
                 return;
@@ -173,7 +180,7 @@ namespace Library
 
             // Wyświetlenie listy użytkowników
             var users = userService.GetAllUsers();
-            if (users.Count == 0)
+            if (users.Count() == 0)
             {
                 Console.WriteLine("Brak zarejestrowanych użytkowników.");
                 return;

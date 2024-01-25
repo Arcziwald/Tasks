@@ -1,19 +1,20 @@
-﻿using System;
-using Library.Core;
+﻿using Library.Core;
+using Library.Service;
 
-namespace Library.Services
+namespace Library.Service
 {
     public interface IBookService
     {
         void AddBook(Book book);
+
         void RemoveBook(int index);
-        Book SearchBook(string title);
+
+        Book? SearchBook(string title);
+
+        void BorrowBook(int bookId, int userId); // Dodana metoda
+
+        List<Book> GetAllBooks(); // Dodana metoda
+
         // Inne metody
-    }
-}
-public class Class1
-{
-    public Class1()
-    {
     }
 }
