@@ -1,7 +1,7 @@
 ﻿using Library.Core;
+using Library.Service.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using Library.Service;
 
 namespace Library.Service
 {

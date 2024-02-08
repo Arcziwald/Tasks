@@ -1,6 +1,6 @@
 ﻿using Library.Core;
 
-namespace Library.Service
+namespace Library.Service.Interfaces
 {
     public interface IUserService
     {
